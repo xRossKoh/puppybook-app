@@ -218,9 +218,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   await _auth.signInWithEmailAndPassword(
                                       email: email, password: password);
                               if (user != null) {
-                                await FirebaseFunctions()
+                                FirebaseFunctions()
                                     .getPupOwner(user.user.uid)
                                     .then((owner) {
+                                  print("Owner while logging in is: $owner");
                                   setState(() {
                                     MyApp.pupOwner = owner;
                                   });

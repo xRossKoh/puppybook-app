@@ -1,10 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:puppybook_app/main.dart';
 import 'package:puppybook_app/models/PupOwner.dart';
+import 'package:puppybook_app/screens/RegistrationScreen.dart';
 
 import '../constants.dart';
 import '../firebaseFunctions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfileScreenStateful extends StatefulWidget {
   const ProfileScreenStateful({Key key}) : super(key: key);
@@ -42,6 +45,7 @@ class _ProfileScreenStatefulState extends State<ProfileScreenStateful> {
               children: <Widget>[
                 Text(
                   'About My Best Bud Ever! ',
+                  softWrap: false,
                   style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -73,10 +77,6 @@ class _ProfileScreenStatefulState extends State<ProfileScreenStateful> {
                       color: Colors.brown,
                     ),
                     title: Text(MyApp.pupOwner.pupName),
-                    trailing: IconButton(
-                      icon: Icon(Icons.edit, color: Colors.grey),
-                      onPressed: () {},
-                    ),
                   ),
                 ),
                 Card(
@@ -94,7 +94,11 @@ class _ProfileScreenStatefulState extends State<ProfileScreenStateful> {
                           "Fave Treat: ",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text(MyApp.pupOwner.pupFood),
+                        Flexible(
+                          child: Text(
+                            MyApp.pupOwner.pupFood,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -117,6 +121,24 @@ class _ProfileScreenStatefulState extends State<ProfileScreenStateful> {
                         ),
                       ],
                     ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Constants.GOLD),
+                  onPressed: () async {
+                    print(FirebaseAuth.instance.currentUser);
+                    await FirebaseAuth.instance.signOut().then((value) =>
+                        Navigator.popAndPushNamed(
+                            context, RegistrationScreen.id));
+                    print("User has been signed out!");
+                  },
+                  child: Text(
+                    "Your pup needs your attention? "
+                    "Sign Out",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15),
                   ),
                 ),
               ],

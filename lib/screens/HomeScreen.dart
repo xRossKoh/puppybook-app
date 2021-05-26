@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             icon: Icon(
-              Icons.person_add,
+              Icons.person,
               color: Colors.white,
             ),
             onPressed: () {
@@ -43,50 +43,54 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            StreamBuilder(
-              stream: FirebaseFunctions().getStream(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  var otherUsers = snapshot.data.docs;
-                  var len = (otherUsers.length);
-                  print("oTher users length: $len");
-                  List<Widget> feedWidgets = [];
-                  for (var otherUser in otherUsers) {
-                    String name = otherUser['name'] ?? " ";
-                    int age = otherUser['age'] ?? 0;
-                    String food = otherUser['faveFood'];
-                    String imgPath = '';
-                    if (otherUser['imgPath'] == null) {
-                      // FirebaseFunctions()
-                      //     .getImageUrlFromStorage('feedDog.jpeg')
-                      //     .then((value) {
-                      //   setState(() {
-                      //     imgPath = value;
-                      //   });
-                      // }).whenComplete(() {});
-                      imgPath =
-                          'https://firebasestorage.googleapis.com/v0/b/flutterworkshop-41682.appspot.com/o/feedDog.jpeg?alt=media&token=13268b09-10e2-44d7-918a-41aca0666b76';
-                    } else {
-                      imgPath = otherUser['imgPath'];
+            Container(
+              child: Text(
+                "Your PupFeed",
+                style: TextStyle(color: Constants.GOLD, fontSize: 40),
+              ),
+            ),
+            Container(
+              height: 600,
+              child: StreamBuilder(
+                stream: FirebaseFunctions().getStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var otherUsers = snapshot.data.docs;
+                    var len = (otherUsers.length);
+                    print("oTher users length: $len");
+                    List<Widget> feedWidgets = [];
+                    for (var otherUser in otherUsers) {
+                      String name = otherUser['name'] ?? " ";
+                      int age = otherUser['age'] ?? 0;
+                      String food = otherUser['faveFood'];
+                      String imgPath = '';
+                      if (otherUser['imgPath'] == null) {
+                        // FirebaseFunctions()
+                        //     .getImageUrlFromStorage('feedDog.jpeg')
+                        //     .then((value) {
+                        //   setState(() {
+                        //     imgPath = value;
+                        //   });
+                        // }).whenComplete(() {});
+                        imgPath =
+                            'https://firebasestorage.googleapis.com/v0/b/flutterworkshop-41682.appspot.com/o/feedDog.jpeg?alt=media&token=13268b09-10e2-44d7-918a-41aca0666b76';
+                      } else {
+                        imgPath = otherUser['imgPath'];
+                      }
+                      // ignore: missing_return
+                      Widget card = FeedCardWidget(
+                          imgPath: imgPath, name: name, food: food, age: age);
+                      feedWidgets.add(card);
+                      print(feedWidgets);
                     }
-                    // ignore: missing_return
-                    Widget card = Padding(
-                        padding: EdgeInsets.all(10),
-                        child: FeedCardWidget(
-                            imgPath: imgPath,
-                            name: name,
-                            food: food,
-                            age: age));
-                    feedWidgets.add(card);
-                    print(feedWidgets);
-                  }
-                  return Expanded(
-                    child: ListView(
+                    return ListView(
                       children: feedWidgets,
-                    ),
-                  );
-                }
-              },
+                    );
+                  } else {
+                    return Container(child: Text("No Data Yet!"));
+                  }
+                },
+              ),
             )
           ],
         ),
@@ -94,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: ElevatedButton(
         child: Text("Test a function"),
         onPressed: () {
-          FirebaseFunctions().getOtherDogs();
+          Navigator.pushNamed(context, ProfileScreenStateful.id);
         },
       ),
     );
@@ -117,28 +121,60 @@ class FeedCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(50.0),
-              child: Image.network(
-                imgPath,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        elevation: 3,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30, bottom: 30),
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Image.network(
+                  imgPath,
+                  height: 120,
+                ),
               ),
-            ),
-            Text(
-              "Hi! I am $name",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text("I wub to eat $food"),
-            Text("I am a big $age years old!"),
-          ],
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Call me:  ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "Wub to eat:   ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "I am a big: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(name),
+                      Text(food),
+                      Text("$age years old!"),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
