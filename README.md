@@ -5,6 +5,7 @@ A new Flutter application.
 ## Getting Started
 
 This project is a starting point for a Flutter application.
+Forked from the main repo, this project focuses on the frontend dev side of making a flutter application. 
 
 A few resources to get you started if this is your first Flutter project:
 
