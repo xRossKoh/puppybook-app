@@ -16,7 +16,6 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  final _auth = FirebaseAuth.instance; //methods for sign in, log in
   String email;
   String password;
   String pupName;
@@ -127,37 +126,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             print(email);
                             print(password);
                             try {
-                              final newUser =
-                                  await _auth.createUserWithEmailAndPassword(
-                                      email: email, password: password);
-                              //Add await and async to ensure user has been created and authenticated before
-                              //calling other functions.
-                              print('New user is:');
-                              print(newUser);
-                              if (newUser != null) {
-                                //newUser is saved inside the _auth object.
-                                print('here');
-                                PupOwner owner = new PupOwner(
-                                    email: email,
-                                    pupName: pupName,
-                                    pupAge: pupAge,
-                                    pupFood: pupFood);
-                                print(owner);
+                              PupOwner owner = new PupOwner(
+                                  email: email,
+                                  pupName: pupName,
+                                  pupAge: pupAge,
+                                  pupFood: pupFood);
+                              print(owner);
 
-                                FirebaseFunctions()
-                                    .addUser(owner, newUser.user.uid)
-                                    .then((value) {
-                                  setState(() {
-                                    owner.id = newUser.user.uid;
-                                    MyApp.pupOwner = owner;
-                                  });
+                              setState(() {
+                                MyApp.pupOwner = owner;
+                              });
 
-                                  print(MyApp.pupOwner.pupName);
-                                });
-                                print("here2");
-                                Navigator.pushNamed(
-                                    context, ProfileScreenStateful.id);
-                              }
+                              print(MyApp.pupOwner.pupName);
+
+                              print("here2");
+                              Navigator.pushNamed(
+                                  context, ProfileScreenStateful.id);
                             } catch (e) {
                               print("Exception while signing up: " + e);
                             }
@@ -214,20 +198,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           onPressed: () async {
                             print('Logging user in.');
                             try {
-                              final user =
-                                  await _auth.signInWithEmailAndPassword(
-                                      email: email, password: password);
-                              if (user != null) {
-                                FirebaseFunctions()
-                                    .getPupOwner(user.user.uid)
-                                    .then((owner) {
-                                  print("Owner while logging in is: $owner");
-                                  setState(() {
-                                    MyApp.pupOwner = owner;
-                                  });
-                                  Navigator.pushNamed(context, HomeScreen.id);
-                                });
-                              }
+                              //JUST A SIMPLE BUTTON, NO USER AUTH
+                              Navigator.pushNamed(context, HomeScreen.id);
                             } catch (e) {
                               print(e);
                             }

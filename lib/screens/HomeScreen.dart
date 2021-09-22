@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               height: 600,
               child: StreamBuilder(
+                //TODO: NEED TO REPLACE FIREBASE STREAM WITH A STATIC LIST OF CONTENT
                 stream: FirebaseFunctions().getStream(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
