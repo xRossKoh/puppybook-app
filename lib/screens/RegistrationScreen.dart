@@ -140,8 +140,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               print(MyApp.pupOwner.pupName);
 
                               print("here2");
-                              Navigator.pushNamed(
-                                  context, ProfileScreenStateful.id);
+                              Navigator.pushNamed(context, HomeScreen.id);
                             } catch (e) {
                               print("Exception while signing up: " + e);
                             }

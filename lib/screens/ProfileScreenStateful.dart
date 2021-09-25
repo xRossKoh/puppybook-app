@@ -123,24 +123,6 @@ class _ProfileScreenStatefulState extends State<ProfileScreenStateful> {
                     ),
                   ),
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Constants.GOLD),
-                  onPressed: () async {
-                    print(FirebaseAuth.instance.currentUser);
-                    await FirebaseAuth.instance.signOut().then((value) =>
-                        Navigator.popAndPushNamed(
-                            context, RegistrationScreen.id));
-                    print("User has been signed out!");
-                  },
-                  child: Text(
-                    "Your pup needs your attention? "
-                    "Sign Out",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15),
-                  ),
-                ),
               ],
             ),
           ),

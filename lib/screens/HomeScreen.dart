@@ -1,14 +1,7 @@
-import 'dart:io';
-import 'dart:ui';
-
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:puppybook_app/constants.dart';
-import 'package:puppybook_app/firebaseFunctions.dart';
-import 'package:puppybook_app/screens/ProfileScreen.dart';
 import 'package:puppybook_app/screens/ProfileScreenStateful.dart';
-import 'package:puppybook_app/screens/RegistrationScreen.dart';
 import 'package:puppybook_app/components/FeedCardWidget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -52,45 +45,22 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               height: 600,
-              child: StreamBuilder(
-                //TODO: NEED TO REPLACE FIREBASE STREAM WITH A STATIC LIST OF CONTENT
-                stream: FirebaseFunctions().getStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    var otherUsers = snapshot.data.docs;
-                    var len = (otherUsers.length);
-                    print("oTher users length: $len");
-                    List<Widget> feedWidgets = [];
-                    for (var otherUser in otherUsers) {
-                      String name = otherUser['name'] ?? " ";
-                      int age = otherUser['age'] ?? 0;
-                      String food = otherUser['faveFood'];
-                      String imgPath = '';
-                      if (otherUser['imgPath'] == null) {
-                        // FirebaseFunctions()
-                        //     .getImageUrlFromStorage('feedDog.jpeg')
-                        //     .then((value) {
-                        //   setState(() {
-                        //     imgPath = value;
-                        //   });
-                        // }).whenComplete(() {});
-                        imgPath =
-                            'https://firebasestorage.googleapis.com/v0/b/flutterworkshop-41682.appspot.com/o/feedDog.jpeg?alt=media&token=13268b09-10e2-44d7-918a-41aca0666b76';
-                      } else {
-                        imgPath = otherUser['imgPath'];
-                      }
-                      // ignore: missing_return
-                      Widget card = FeedCardWidget(
-                          imgPath: imgPath, name: name, food: food, age: age);
-                      feedWidgets.add(card);
-                      print(feedWidgets);
-                    }
-                    return ListView(
-                      children: feedWidgets,
-                    );
+              child: ListView.builder(
+                itemCount: Constants.FEED_INFO.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var len = (Constants.FEED_INFO.length);
+                  String name = Constants.FEED_INFO[index]['name'] ?? " ";
+                  int age = Constants.FEED_INFO[index]['age'] ?? 0;
+                  String food = Constants.FEED_INFO[index]['faveFood'];
+                  String imgPath = '';
+                  if (Constants.FEED_INFO[index]['imgPath'] == null) {
+                    imgPath =
+                        'https://firebasestorage.googleapis.com/v0/b/flutterworkshop-41682.appspot.com/o/feedDog.jpeg?alt=media&token=13268b09-10e2-44d7-918a-41aca0666b76';
                   } else {
-                    return Container(child: Text("No Data Yet!"));
+                    imgPath = Constants.FEED_INFO[index]['imgPath'];
                   }
+                  return FeedCardWidget(
+                      imgPath: imgPath, name: name, food: food, age: age);
                 },
               ),
             )

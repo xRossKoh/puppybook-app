@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:puppybook_app/main.dart';
-import 'package:puppybook_app/models/PupOwner.dart';
 
 import '../constants.dart';
 
@@ -9,7 +7,7 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key key}) : super(key: key);
   static const String id = "/profile_screen_stateless";
 
-  // User user = MyApp.user; //TODO: Try this
+  // User user = MyApp.user; //TODO: Try this --> doesnt work in stateless
 
   @override
   Widget build(BuildContext context) {
